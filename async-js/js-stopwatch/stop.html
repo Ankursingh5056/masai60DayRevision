@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            border: 2px solid black;
+            border-radius: 5px;
+            padding: 10px;
+            width: 200px;
+        }
+
+        .custom-stopwatch {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="custom-stopwatch">00:00:00</div>
+        <button id="custom-start">Start</button>
+        <button id="custom-pause">Pause</button>
+        <button id="custom-reset">Reset</button>
+    </div>
+</body>
+
+</html>
+
+<script>
+    let customTimerId;
+    let customElapsedTime = 0;
+    let customIsPaused = false;
+
+    function customFormatTime(ms) {
+        let seconds = Math.floor((ms / 1000) % 60);
+        let minutes = Math.floor((ms / (1000 * 60)) % 60);
+        let hours = Math.floor((ms / (1000 * 60 * 60)));
+
+        return `${hours > 0 ? hours.toString().padStart(2, '0') + ':' : ''}${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function customStartTimer() {
+        if (!customTimerId) {
+            customTimerId = setInterval(() => {
+                customElapsedTime += 1000;
+                customUpdateDisplay();
+            }, 1000);
+        }
+    }
+
+    function customPauseTimer() {
+        clearInterval(customTimerId);
+        customTimerId = null;
+    }
+
+    function customResetTimer() {
+        clearInterval(customTimerId);
+        customTimerId = null;
+        customElapsedTime = 0;
+        customIsPaused = false;
+        customUpdateDisplay();
+    }
+
+    function customUpdateDisplay() {
+        document.querySelector('.custom-stopwatch').textContent = customFormatTime(customElapsedTime);
+    }
+
+    document.getElementById('custom-start').addEventListener('click', customStartTimer);
+    document.getElementById('custom-pause').addEventListener('click', customPauseTimer);
+    document.getElementById('custom-reset').addEventListener('click', customResetTimer);
+
+    customUpdateDisplay();
+</script>
