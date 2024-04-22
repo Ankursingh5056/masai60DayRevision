@@ -8,13 +8,13 @@
     body {
         text-align: center;
     }
-    input {
+    .custom-input {
         width: 50px;
         padding: 5px;
         margin: 0 5px;
         text-align: center;
     }
-    button {
+    .custom-button {
         padding: 10px 20px;
         margin: 10px;
         font-size: 16px;
@@ -23,57 +23,55 @@
 </head>
 <body>
     <div>
-        <input type="number" id="hours" min="0" value="0"> :
-        <input type="number" id="minutes" min="0" max="59" value="0"> :
-        <input type="number" id="seconds" min="0" max="59" value="0">
+        <input type="number" class="custom-input" id="custom-hours" min="0" value="0"> :
+        <input type="number" class="custom-input" id="custom-minutes" min="0" max="59" value="0"> :
+        <input type="number" class="custom-input" id="custom-seconds" min="0" max="59" value="0">
     </div>
-    <button id="start">Start</button>
-    <button id="pause">Pause</button>
-    <button id="reset">Reset</button>
-    <div id="timer"></div>
+    <button id="custom-start" class="custom-button">Start</button>
+    <button id="custom-pause" class="custom-button">Pause</button>
+    <button id="custom-reset" class="custom-button">Reset</button>
+    <div id="custom-timer"></div>
 
 </body>
 </html>
 
+<script>
+    let hoursInput = document.getElementById('custom-hours');
+    let minutesInput = document.getElementById('custom-minutes');
+    let secondsInput = document.getElementById('custom-seconds');
+    let timerDisplay = document.getElementById('custom-timer');
+    let timerId;
+    let totalSeconds;
 
+    function startTimer() {
+        totalSeconds = parseInt(hoursInput.value) * 3600 + parseInt(minutesInput.value) * 60 + parseInt(secondsInput.value);
+        timerId = setInterval(() => {
+            if (totalSeconds <= 0) {
+                clearInterval(timerId);
+                timerDisplay.textContent = 'Timer Expired!';
+                return;
+            }
+            let hours = Math.floor(totalSeconds / 3600);
+            let minutes = Math.floor((totalSeconds % 3600) / 60);
+            let seconds = totalSeconds % 60;
+            timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            totalSeconds--;
+        }, 1000);
+    }
 
-    <script>
-        let hoursInput = document.getElementById('hours');
-        let minutesInput = document.getElementById('minutes');
-        let secondsInput = document.getElementById('seconds');
-        let timerDisplay = document.getElementById('timer');
-        let timerId;
-        let totalSeconds;
+    function pauseTimer() {
+        clearInterval(timerId);
+    }
 
-        function startTimer() {
-            totalSeconds = parseInt(hoursInput.value) * 3600 + parseInt(minutesInput.value) * 60 + parseInt(secondsInput.value);
-            timerId = setInterval(() => {
-                if (totalSeconds <= 0) {
-                    clearInterval(timerId);
-                    timerDisplay.textContent = 'Timer Expired!';
-                    return;
-                }
-                let hours = Math.floor(totalSeconds / 3600);
-                let minutes = Math.floor((totalSeconds % 3600) / 60);
-                let seconds = totalSeconds % 60;
-                timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                totalSeconds--;
-            }, 1000);
-        }
+    function resetTimer() {
+        clearInterval(timerId);
+        hoursInput.value = '0';
+        minutesInput.value = '0';
+        secondsInput.value = '0';
+        timerDisplay.textContent = '';
+    }
 
-        function pauseTimer() {
-            clearInterval(timerId);
-        }
-
-        function resetTimer() {
-            clearInterval(timerId);
-            hoursInput.value = '0';
-            minutesInput.value = '0';
-            secondsInput.value = '0';
-            timerDisplay.textContent = '';
-        }
-
-        document.getElementById('start').addEventListener('click', startTimer);
-        document.getElementById('pause').addEventListener('click', pauseTimer);
-        document.getElementById('reset').addEventListener('click', resetTimer);
-    </script>
+    document.getElementById('custom-start').addEventListener('click', startTimer);
+    document.getElementById('custom-pause').addEventListener('click', pauseTimer);
+    document.getElementById('custom-reset').addEventListener('click', resetTimer);
+</script>
